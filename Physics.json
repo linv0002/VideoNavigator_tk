@@ -1,0 +1,115 @@
+{
+    "General Physics": {
+        "Physics - TTC": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Physics - TTC.json",
+        "Classical Physics I - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Classical Physics I - MIT.json",
+        "Classical Physics II - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Classical Physics II - MIT.json",
+        "Classical Physics III - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Classical Physics III - MIT.json",
+        "Fundamentals of Physics with Ramamurti Shankar": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Fundamentals of Physics with Ramamurti Shankar.json",
+        "Fundamentals of Physics II with Ramamurti Shankar": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Fundamentals of Physics II with Ramamurti Shankar.json",
+        "The Mechanical Universe and Beyond": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\The Mechanical Universe and Beyond.json",
+        "Meloche": {
+            "Physics 100 - Mastering Newton's Laws of Motion - Meloche": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Physics 100 - Mastering Newton's Laws of Motion - Meloche.json",
+            "Physics 100 Mastering Impulse, Momentum, and Collisions": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Physics 100 Mastering Impulse, Momentum, and Collisions.json",
+            "Physics 100 Mastering Rotational Kinematics and Dynamics": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Physics 100 Mastering Rotational Kinematics and Dynamics.json",
+            "Physics 100 Torque and Equilibrium of Rigid Bodies": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Physics 100 Torque and Equilibrium of Rigid Bodies.json",
+            "Physics 100 Electric Force, Fields, Potential and Capacitors": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Physics 100 Electric Force, Fields, Potential and Capacitors.json",
+            "Physics 100 Mastering Ohm's Law and DC Circuits": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Physics 100 Mastering Ohm's Law and DC Circuits.json"
+        }
+    },
+    "Modern Physics": {
+        "Understanding Einstein - The Special Theory of Relativity by Larry Lagerstrom": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Understanding Einstein - The Special Theory of Relativity by Larry Lagerstrom.json",
+        "Introduction to Special Relativity": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Introduction to Special Relativity.json",
+        "Modern Physics for Non-Scientists": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Modern Physics for Non-Scientists.json"
+    },
+    "Statistical and Thermal Physics": {
+        "Statistical Physics & Thermodynamics from Beginner to Expert": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Statistical Physics & Thermodynamics from Beginner to Expert.json",
+        "Statistical Physics relation to quanta and thermodynamics": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Statistical Physics relation to quanta and thermodynamics.json",
+        "Statistical Mechanics I - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Statistical Mechanics I - MIT.json",
+        "Statistical Mechanics II - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Statistical Mechanics II - MIT.json"
+    },
+    "Electrodynamics": {
+        "Electromagnetic Theory": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Electromagnetic Theory.json",
+        "Electromagnetic Theory II - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Electromagnetic Theory II - MIT.json",
+        "Classical Electrodynamics by J D Jackson": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Classical Electrodynamics by J D Jackson.json"
+    },
+    "Optics": {
+        "Optics from Beginner to Expert The Physics of Light": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Optics from Beginner to Expert The Physics of Light.json",
+        "Optics - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Optics - MIT.json",
+        "Introduction to Quantum Optics": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Introduction to Quantum Optics.json"
+    },
+    "Quantum Mechanics": {
+        "Understanding the Quantum World (TTC)": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Understanding the Quantum World (TTC).json",
+        "Quantum Mechanics I (Griffiths) by Prof. Brant Carlson": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Mechanics I (Griffiths) by Prof. Brant Carlson.json",
+        "Quantum Physics - From Beginner to Expert - Udemy": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Physics - From Beginner to Expert - Udemy.json",
+        "Introduction to Quantum Physics": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Introduction to Quantum Physics.json",
+        "Quantum Mechanics I (MIT)": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Mechanics I (MIT).json",
+        "Quantum Mechanics II (MIT)": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Mechanics II - MIT.json",
+        "Quantum Mechanics - Coursera": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Mechanics - Coursera.json",
+        "Lectures on Quantum Mechanics - Schuller": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Lectures on Quantum Mechanics - Schuller.json",
+        "NPTEL": ""
+    },
+    "Quantum Computing": {
+        "The Complete Mathematics for Quantum Computing Course": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\The Complete Mathematics for Quantum Computing Course.json",
+        "Quantum Computing Bootcamp(A-Z) Complete(Theory + Practical)": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Computing Bootcamp(A-Z) Complete(Theory + Practical).json",
+        "Quantum Computing Fundamentals": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Computing Fundamentals.json",
+        "Quantum Computing A-Z": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Computing A-Z.json",
+        "The Complete Quantum Computing Course": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\The Complete Quantum Computing Course.json",
+        "Fundamentals of Quantum Computing Theory and Practice": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Fundamentals of Quantum Computing Theory and Practice.json",
+        "QC101 Quantum Computing & Quantum Physics for Beginners": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\QC101 Quantum Computing & Quantum Physics for Beginners.json",
+        "QC101 Quantum Computing & Intro to Quantum Machine Learning": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\QC101 Quantum Computing & Intro to Quantum Machine Learning.json",
+        "Introduction to Quantum Computing using Qiskit": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Introduction to Quantum Computing using Qiskit.json",
+        "Learn Quantum Computing with Python and Q# A hands-on approach": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Learn Quantum Computing with Python and Q# A hands-on approach.json",
+        "Quantum Computing Fundamentals with Microsoft Azure Quantum": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Computing Fundamentals with Microsoft Azure Quantum.json",
+        "A complete course on IBM certified Quantum Developer Exam": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\A complete course on IBM certified Quantum Developer Exam.json",
+        "Computing Quantum Number in Quantum Computer": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Computing Quantum Number in Quantum Computer.json"
+    },
+    "Classical Mechanics": {
+        "Theoretical Classical Mechanics From Beginner to Expert": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Theoretical Classical Mechanics From Beginner to Expert.json",
+        "Classical Mechanics": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Classical Mechanics.json",
+        "Classical Mechanics Lectures (Goldstein)": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Classical Mechanics Lectures (Goldstein).json"
+    },
+    "Solid State Physics": {
+        "Solid State Physics": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Solid State Physics.json"
+    },
+    "Nuclear and Particle Physics": {
+        "Nuclear Physics Explained": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Nuclear Physics Explained.json",
+        "Particle Physics for Non-Physicists": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Particle Physics for Non-Physicists.json",
+        "Atomic, Nuclear & Particle Physics From Beginner to Expert": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Atomic, Nuclear & Particle Physics From Beginner to Expert.json",
+        "NE101 Fundamentals of Nuclear Science and Engineering": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\NE101 Fundamentals of Nuclear Science and Engineering.json",
+        "Nuclear and Particle Physics - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Nuclear and Particle Physics - MIT.json",
+        "Particle Physics - Colorado School of Mines": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Particle Physics - Colorado School of Mines.json",
+        "Math for Quantum Chromodynamics and the Electroweak theory": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Math for Quantum Chromodynamics and the Electroweak theory.json"
+    },
+    "General Relativity": {
+        "Understanding Gravity - TTC": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Understanding Gravity - TTC.json",
+        "What Einstein Got Wrong - TTC": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\What Einstein Got Wrong - TTC.json",
+        "New to Tensors - Start Here": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\New to Tensors - Start Here.json",
+        "General Relativity - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\General Relativity - MIT.json",
+        "General Relativity - Colorado School of Mines": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\General Relativity - Colorado School of Mines.json"
+    },
+    "Quantum Field Theory": {
+        "Relativistic Quantum Mechanics Spin & Dirac Equation": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Relativistic Quantum Mechanics Spin & Dirac Equation.json",
+        "Bootcamp to Relativistic Quantum Mechanics": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Bootcamp to Relativistic Quantum Mechanics.json",
+        "Quantum Field Theory I - Prof. Matheus": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Field Theory I - Prof. Matheus.json",
+        "Quantum Field Theory": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Field Theory.json",
+        "Advanced Quantum Field Theory intuition with path integrals": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Advanced Quantum Field Theory intuition with path integrals.json",
+        "Path Integral and Functional Methods in QFT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Path Integral and Functional Methods in QFT.json",
+        "Feynman Path Integrals": ""
+    },
+    "Quantum Gravity": {
+        "Quantum Gravity from Gravitational Waves to Gravitons": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Quantum Gravity from Gravitational Waves to Gravitons.json",
+        "Loop Quantum Gravity, Differential Forms, Quantum Geometry": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Loop Quantum Gravity, Differential Forms, Quantum Geometry.json"
+    },
+    "String Theory": {
+        "Theory of Everything": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Theory of Everything.json",
+        "String Theory - Barton Zwiebach": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\String Theory - Barton Zwiebach.json",
+        "String Theory and Holographic Duality - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\String Theory and Holographic Duality - MIT.json",
+        "Mathematical Intuition behind String Theory": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Mathematical Intuition behind String Theory.json"
+    },
+    "Math Methods": {
+        "Math Methods in Physics - Colorado School of Mines": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Math Methods in Physics - Colorado School of Mines.json",
+        "Landau Computational Physics Course": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Landau Computational Physics Course.json",
+        "Master the Fourier Transform and its Applications": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Master the Fourier Transform and its Applications.json",
+        "amath507_Calculus of Variations": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\amath507_Calculus of Variations.json"
+    }
+}
