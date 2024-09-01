@@ -59,6 +59,7 @@ class VideoNavigatorApp:
         self.context_menu.add_command(label="Delete Item", command=self.delete_item)
         self.context_menu.add_command(label="Add YouTube Link", command=self.add_youtube_link)
         self.context_menu.add_command(label="Add Playlist", command=self.add_playlist)
+        self.context_menu.add_command(label="Populate Playlist", command=self.populate_playlist)
         self.context_menu.add_command(label="Delete Playlist", command=self.delete_playlist)
         self.context_menu.add_command(label="Add New Topic", command=self.add_new_topic)
         self.context_menu.add_command(label="Delete Topic", command=self.delete_topic)
@@ -202,6 +203,64 @@ class VideoNavigatorApp:
 
         return playlist_path
 
+    def populate_playlist(self):
+        selected_item = self.tree.selection()
+        if not selected_item:
+            messagebox.showwarning("No Selection", "Please select a title, topic, or subtopic.")
+            return
+
+        selected_item = selected_item[0]
+        item_type = self.determine_item_type(selected_item)
+
+        if item_type == "title":
+            # Check if the title already has a playlist before opening the file dialog
+            selected_title = self.tree.item(selected_item, "text").strip()
+            values = self.tree.item(selected_item, "values")
+
+            if values and values[0]:  # Check if a playlist already exists
+                self.message_area.insert(tk.END, f"Playlist already exists for '{selected_title}'. Skipping.\n")
+                return
+
+            # If no playlist exists, proceed with file dialog
+            folder_selected = filedialog.askdirectory()
+            if folder_selected:
+                self.build_playlist_for_title(selected_item, folder_selected)
+
+        elif item_type in ["subtopic", "topic"]:
+            folder_selected = filedialog.askdirectory()
+            if folder_selected:
+                # For subtopic or topic: iterate through all child titles and create playlists if missing
+                self.iterate_through_children_and_build_playlists(selected_item, folder_selected)
+
+    def build_playlist_for_title(self, selected_item, base_directory):
+        selected_title = self.tree.item(selected_item, "text").strip()
+        values = self.tree.item(selected_item, "values")
+
+        if values and values[0]:  # Check if a playlist already exists
+            self.message_area.insert(tk.END, f"Playlist already exists for '{selected_title}'. Skipping.\n")
+            return
+
+        # Search for a matching directory in the base directory and its subdirectories
+        for root, dirs, _ in os.walk(base_directory):
+            for dir_name in dirs:
+                if dir_name.strip() == selected_title:
+                    playlist_path = self.create_playlist(os.path.join(root, dir_name), selected_title)
+                    self.update_json_file(selected_item, playlist_path)
+                    self.message_area.insert(tk.END, f"Created playlist for '{selected_title}' in {playlist_path}\n")
+                    return
+
+        self.message_area.insert(tk.END, f"No matching directory found for '{selected_title}'.\n")
+
+    def iterate_through_children_and_build_playlists(self, parent_item, base_directory):
+        def iterate_tree(item):
+            for child in self.tree.get_children(item):
+                if self.determine_item_type(child) == "title":
+                    self.build_playlist_for_title(child, base_directory)
+                else:
+                    iterate_tree(child)
+
+        iterate_tree(parent_item)
+
     def update_json_file(self, selected_item, playlist_path):
         parent_item = self.tree.parent(selected_item)
         selected_title = self.tree.item(selected_item, "text")
@@ -214,19 +273,25 @@ class VideoNavigatorApp:
                 if isinstance(value, dict):
                     if key == parent_title:
                         if selected_title in value:
-                            value[selected_title] = playlist_path
+                            structure[key][selected_title] = playlist_path  # Assign the playlist path
                             return True
                     if update_items(value, selected_title, parent_title, playlist_path):
                         return True
                 elif key == selected_title and parent_title is None:
-                    structure[key] = playlist_path
+                    structure[key] = playlist_path  # Assign the playlist path
                     return True
             return False
 
-        update_items(self.topics[topic_name], selected_title, parent_title, playlist_path)
-        self.modified_topics.add(topic_name)
+        if update_items(self.topics[topic_name], selected_title, parent_title, playlist_path):
+            self.modified_topics.add(topic_name)
+            self.tree.item(selected_item, values=[playlist_path])
 
-        self.tree.item(selected_item, values=[playlist_path])
+            # Immediately save the updated structure to the JSON file
+            with open(f"{topic_name}.json", "w") as file:
+                json.dump(self.topics[topic_name], file, indent=4)
+
+        else:
+            self.message_area.insert(tk.END, f"Error: Could not update playlist for '{selected_title}'.\n")
 
     def get_topic_name(self, item_id):
         while True:
