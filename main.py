@@ -53,6 +53,7 @@ class VideoNavigatorApp:
 
         # Create a context menu
         self.context_menu = tk.Menu(self.root, tearoff=0)
+        self.context_menu.add_command(label="View/Edit Playlist", command=self.view_edit_playlist)
         self.context_menu.add_command(label="Add Subtopic/Title", command=self.add_item)
         self.context_menu.add_command(label="Move Up", command=self.move_up)
         self.context_menu.add_command(label="Move Down", command=self.move_down)
@@ -71,6 +72,125 @@ class VideoNavigatorApp:
 
         # Handle closing the app to save changes
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
+    def view_edit_playlist(self):
+        selected_item = self.tree.selection()
+        if not selected_item:
+            messagebox.showwarning("No Selection", "Please select a title to view/edit its playlist.")
+            return
+
+        selected_item = selected_item[0]
+        selected_title = self.tree.item(selected_item, "text")
+        values = self.tree.item(selected_item, "values")
+
+        if not values or not values[0]:
+            messagebox.showwarning("No Playlist", f"No playlist found for '{selected_title}'.")
+            return
+
+        playlist_path = values[0]
+        if not os.path.exists(playlist_path):
+            messagebox.showwarning("Invalid Playlist", f"The playlist path for '{selected_title}' does not exist.")
+            return
+
+        with open(playlist_path, "r") as file:
+            self.playlist = json.load(file)
+
+        edit_window = tk.Toplevel(self.root)
+        edit_window.title(f"Edit Playlist: {selected_title}")
+
+        edit_listbox = tk.Listbox(edit_window, width=50, height=20, selectmode=tk.EXTENDED)
+        edit_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+
+        for item in self.playlist:
+            display_text = item["description"] if item["description"] else item["url"]
+            edit_listbox.insert(tk.END, display_text)
+
+        scrollbar_y = tk.Scrollbar(edit_window, orient=tk.VERTICAL, command=edit_listbox.yview)
+        scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
+        edit_listbox.config(yscrollcommand=scrollbar_y.set)
+
+        scrollbar_x = tk.Scrollbar(edit_window, orient=tk.HORIZONTAL, command=edit_listbox.xview)
+        scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
+        edit_listbox.config(xscrollcommand=scrollbar_x.set)
+
+        controls_frame = tk.Frame(edit_window)
+        controls_frame.pack(side=tk.RIGHT, fill=tk.Y)
+
+        def move_up():
+            selected = list(edit_listbox.curselection())
+            if selected:
+                if selected[0] > 0:  # Ensure the first selected item is not at the top
+                    for index in selected:
+                        # Swap each selected item with the one above it
+                        self.playlist[index], self.playlist[index - 1] = self.playlist[index - 1], self.playlist[index]
+                    refresh_edit_listbox()
+                    # Maintain selection after the move
+                    new_selection = [i - 1 for i in selected]
+                    for i in new_selection:
+                        edit_listbox.selection_set(i)
+                        edit_listbox.see(i)  # Ensure each moved item is visible
+
+        def move_down():
+            selected = list(edit_listbox.curselection())
+            if selected:
+                if selected[-1] < len(self.playlist) - 1:  # Ensure the last selected item is not at the bottom
+                    for index in reversed(selected):
+                        # Swap each selected item with the one below it
+                        self.playlist[index], self.playlist[index + 1] = self.playlist[index + 1], self.playlist[index]
+                    refresh_edit_listbox()
+                    # Maintain selection after the move
+                    new_selection = [i + 1 for i in selected]
+                    for i in new_selection:
+                        edit_listbox.selection_set(i)
+                        edit_listbox.see(i)  # Ensure each moved item is visible
+
+        def delete_item():
+            selected = list(edit_listbox.curselection())
+            if selected:
+                for index in reversed(selected):  # Reverse to avoid reindexing issues
+                    del self.playlist[index]
+                refresh_edit_listbox()
+
+        def update_description():
+            selected = edit_listbox.curselection()
+            if selected:
+                index = selected[0]
+                new_description = description_entry.get()
+                self.playlist[index]["description"] = new_description
+                refresh_edit_listbox()
+
+        def refresh_edit_listbox():
+            edit_listbox.delete(0, tk.END)
+            for item in self.playlist:
+                display_text = item["description"] if item["description"] else item["url"]
+                edit_listbox.insert(tk.END, display_text)
+
+        def save_changes():
+            with open(playlist_path, "w") as file:
+                json.dump(self.playlist, file, indent=4)
+            edit_window.destroy()
+
+        move_up_button = tk.Button(controls_frame, text="Move Up", command=move_up)
+        move_up_button.pack(padx=5, pady=5)
+
+        move_down_button = tk.Button(controls_frame, text="Move Down", command=move_down)
+        move_down_button.pack(padx=5, pady=5)
+
+        delete_button = tk.Button(controls_frame, text="Delete", command=delete_item)
+        delete_button.pack(padx=5, pady=5)
+
+        description_label = tk.Label(controls_frame, text="Description:")
+        description_label.pack(padx=5, pady=5)
+
+        description_entry = tk.Entry(controls_frame)
+        description_entry.pack(padx=5, pady=5)
+
+        update_button = tk.Button(controls_frame, text="Update Description", command=update_description)
+        update_button.pack(padx=5, pady=5)
+
+        save_button = tk.Button(controls_frame, text="Save and Close", command=save_changes)
+        save_button.pack(padx=5, pady=5)
+
 
     def load_topic_files(self):
         topics_list_path = "topics_list.json"
