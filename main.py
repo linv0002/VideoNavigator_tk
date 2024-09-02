@@ -56,6 +56,7 @@ class VideoNavigatorApp:
         self.context_menu.add_command(label="Add Subtopic/Title", command=self.add_item)
         self.context_menu.add_command(label="Move Up", command=self.move_up)
         self.context_menu.add_command(label="Move Down", command=self.move_down)
+        self.context_menu.add_command(label="Rename Item", command=self.rename_item)
         self.context_menu.add_command(label="Delete Item", command=self.delete_item)
         self.context_menu.add_command(label="Add YouTube Link", command=self.add_youtube_link)
         self.context_menu.add_command(label="Add Playlist", command=self.add_playlist)
@@ -583,6 +584,69 @@ class VideoNavigatorApp:
         index1 = item_list.index(f"{item1}.json")
         index2 = item_list.index(f"{item2}.json")
         item_list[index1], item_list[index2] = item_list[index2], item_list[index1]
+
+    def rename_item(self):
+        selected_item = self.tree.selection()
+
+        if not selected_item:
+            messagebox.showwarning("No Selection", "Please select a topic, subtopic, or title to rename.")
+            return
+
+        selected_item = selected_item[0]
+        selected_title = self.tree.item(selected_item, "text")
+
+        # Determine the type of the selected item
+        item_type = self.determine_item_type(selected_item)
+
+        if item_type == "topic":
+            messagebox.showinfo("Rename Not Allowed", "Topic names cannot be changed.")
+            return
+
+        new_name = simpledialog.askstring("Rename Item", f"Enter a new name for '{selected_title}':")
+
+        if new_name:
+            topic_name = self.get_topic_name(selected_item)
+
+            # Save the current tree state before making changes
+            self.save_tree_state()
+
+            # Update the in-memory structure, passing the selected_item ID to target the correct item
+            self.update_structure_name(topic_name, selected_item, selected_title, new_name)
+
+            # Update the tree item text
+            self.tree.item(selected_item, text=new_name)
+
+            # Mark the topic as modified
+            self.modified_topics.add(topic_name)
+
+            # Update the JSON file immediately
+            self.update_json_file_after_edit(topic_name)
+
+            # Rebuild the tree to ensure it's showing the latest data
+            self.build_tree_structure()
+
+            # Restore the tree state to keep it expanded as it was before
+            self.restore_tree_state()
+
+    def update_structure_name(self, topic_name, selected_item, old_name, new_name):
+        def rename_item_in_structure(structure, item_id, old_name, new_name):
+            for key, value in list(structure.items()):
+                if key == old_name and item_id == self.tree.selection()[0]:
+                    # Preserve the order by re-inserting the renamed item in the same position
+                    items = list(structure.items())
+                    index = items.index((key, value))  # Find the current position
+                    items[index] = (new_name, value)  # Replace the old name with the new name
+                    structure.clear()  # Clear the current structure
+                    structure.update(items)  # Reinsert all items, maintaining the order
+                    return True
+                elif isinstance(value, dict):
+                    # Recursively search within nested dictionaries
+                    if rename_item_in_structure(value, item_id, old_name, new_name):
+                        return True
+            return False
+
+        if topic_name in self.topics:
+            rename_item_in_structure(self.topics[topic_name], selected_item, old_name, new_name)
 
     def delete_item(self):
         selected_item = self.tree.selection()[0]
