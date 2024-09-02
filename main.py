@@ -65,6 +65,7 @@ class VideoNavigatorApp:
         self.context_menu.add_command(label="Delete Playlist", command=self.delete_playlist)
         self.context_menu.add_command(label="Add New Topic", command=self.add_new_topic)
         self.context_menu.add_command(label="Delete Topic", command=self.delete_topic)
+        self.context_menu.add_command(label="Load Topic File", command=self.load_new_topic_tree)
 
         # Add a text area to display messages
         self.message_area = tk.Text(root, height=5)
@@ -843,6 +844,45 @@ class VideoNavigatorApp:
             self.save_topic_files()
             # Rebuild the tree structure to reflect the changes
             self.build_tree_structure()
+
+    def load_new_topic_tree(self):
+        # Open a file dialog to select a topics list JSON file
+        file_path = filedialog.askopenfilename(
+            title="Select Topics List JSON File",
+            filetypes=(("JSON Files", "*.json"), ("All Files", "*.*"))
+        )
+
+        if file_path:
+            try:
+                # Load the selected topics list file
+                with open(file_path, "r") as file:
+                    new_topics_list = json.load(file)
+
+                if not isinstance(new_topics_list, list):
+                    raise ValueError("The selected file does not contain a valid topics list (expected a list).")
+
+                # Clear the current topics and tree structure
+                self.topics.clear()
+                self.tree.delete(*self.tree.get_children())
+
+                # Load each topic file from the new topics list
+                for topic_file in new_topics_list:
+                    topic_name = os.path.splitext(os.path.basename(topic_file))[0]
+                    with open(topic_file, "r") as tf:
+                        self.topics[topic_name] = json.load(tf)
+
+                # Build the tree structure with the newly loaded topics
+                self.build_tree_structure()
+
+                # Update the current topics list and save it if needed
+                self.topic_files = new_topics_list
+                self.save_topic_files()
+
+                # Display success message
+                messagebox.showinfo("Success", "Successfully loaded and built the tree from the selected topics list.")
+
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to load topics list. Error: {str(e)}")
 
     def show_context_menu(self, event):
         # Show context menu
