@@ -3,22 +3,50 @@ from tkinter import ttk, filedialog, messagebox, simpledialog, Toplevel, Label, 
 import os
 import json
 import sys
+import logging
+
+# Logging configuration
+log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "video_navigator.log")
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(log_file_path, mode='w')
+        # logging.StreamHandler()  # Optional: to keep logging in the console as well
+    ]
+)
 
 class VideoNavigatorApp:
-    def __init__(self, root):
+    def __init__(self, root, load_playlist_callback=None, topics_list_path=None):
         self.root = root
+        self.load_playlist_callback = load_playlist_callback
         self.root.title("Video Navigator")
         self.topics = {}
         self.modified_topics = set()
         self.tree_state = {}
 
-        # Load topic files from topics_list.json
-        self.topic_files = self.load_topic_files()
+        # Get the directory where the script is located
+        try:
+            self.script_dir = os.path.dirname(os.path.abspath(__file__))
+        except NameError:
+            # Fallback to current working directory if __file__ is not defined
+            self.script_dir = os.getcwd()
+            logging.warning("`__file__` is not defined. Using current working directory.")
+
+        logging.debug(f"Script directory set to: {self.script_dir}")
+
+        # Load topic files from topics_list_path using topics_list.json in the script directory as default
+        if topics_list_path:
+            self.topic_files = self.load_topic_files(topics_list_path)
+        else:
+            self.topic_files = self.load_topic_files()
+
         self.topic_names = [os.path.splitext(os.path.basename(topic_file))[0] for topic_file in self.topic_files]
 
-        # Directory where playlists will be stored
-        self.playlist_dir = os.path.join(os.getcwd(), "playlists")
+        # Directory where playlists will be stored (inside script directory)
+        self.playlist_dir = os.path.join(self.script_dir, "playlists")
         os.makedirs(self.playlist_dir, exist_ok=True)
+        logging.debug(f"Playlists directory: {self.playlist_dir}")
 
         # Load all topics
         self.load_all_topics()
@@ -66,6 +94,8 @@ class VideoNavigatorApp:
         self.context_menu.add_command(label="Add New Topic", command=self.add_new_topic)
         self.context_menu.add_command(label="Delete Topic", command=self.delete_topic)
         self.context_menu.add_command(label="Load Topic File", command=self.load_new_topic_tree)
+        if load_playlist_callback:
+            self.context_menu.add_command(label="Load Playlist in Player", command=self.emit_playlist_to_player)
 
         # Add a text area to display messages
         self.message_area = tk.Text(root, height=5)
@@ -73,6 +103,33 @@ class VideoNavigatorApp:
 
         # Handle closing the app to save changes
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
+    def emit_playlist_to_player(self):
+        selected_item = self.tree.selection()
+        if not selected_item:
+            messagebox.showwarning("No Selection", "Please select a title to load its playlist.")
+            return
+
+        selected_item = selected_item[0]
+        values = self.tree.item(selected_item, "values")
+        playlist_path = values[0] if values else None
+
+        if playlist_path and os.path.exists(playlist_path):
+            # Call the callback function to send the playlist path to the video player
+            if self.load_playlist_callback:
+                logging.debug(f"Emitting playlist path to player: {playlist_path}")
+                self.load_playlist_callback(playlist_path)
+            else:
+                messagebox.showwarning("No Callback function defined", "The Callback function has not been defined")
+        else:
+            messagebox.showwarning("No Playlist", "The selected title has no valid playlist.")
+
+    def get_playlist_path(self):
+        selected_item = self.tree.selection()
+        values = self.tree.item(selected_item, "values")
+        if values:
+            return values[0]
+        return None
 
     def view_edit_playlist(self):
         selected_item = self.tree.selection()
@@ -192,23 +249,32 @@ class VideoNavigatorApp:
         save_button = tk.Button(controls_frame, text="Save and Close", command=save_changes)
         save_button.pack(padx=5, pady=5)
 
-
-    def load_topic_files(self):
-        topics_list_path = "topics_list.json"
+    def load_topic_files(self, topics_list_path=None):
+        if topics_list_path is None:
+            topics_list_path = os.path.join(self.script_dir, "topics_list.json")
+        logging.debug(f"Loading topic files from: {topics_list_path}")
         if os.path.exists(topics_list_path):
             with open(topics_list_path, "r") as file:
                 return json.load(file)
+        logging.warning(f"topics_list.json not found in {self.script_dir}")
         return []
 
     def save_topic_files(self):
-        with open("topics_list.json", "w") as file:
+        topics_list_path = os.path.join(self.script_dir, "topics_list.json")
+        logging.debug(f"Saving topic files to: {topics_list_path}")
+        with open(topics_list_path, "w") as file:
             json.dump(self.topic_files, file, indent=4)
 
     def load_all_topics(self):
         for topic_file in self.topic_files:
-            topic_name = os.path.splitext(os.path.basename(topic_file))[0]
-            with open(topic_file, "r") as file:
-                self.topics[topic_name] = json.load(file)
+            topic_file_path = os.path.join(self.script_dir, topic_file)
+            topic_name = os.path.splitext(os.path.basename(topic_file_path))[0]
+            if os.path.exists(topic_file_path):
+                with open(topic_file_path, "r") as file:
+                    self.topics[topic_name] = json.load(file)
+                logging.debug(f"Loaded topic: {topic_name} from {topic_file_path}")
+            else:
+                logging.warning(f"Topic file not found: {topic_file_path}")
 
     def build_tree_structure(self):
         self.save_tree_state()
@@ -319,10 +385,12 @@ class VideoNavigatorApp:
                         "description": filename
                     })
 
+        # Save the playlist in the script directory under the "playlists" folder
         playlist_path = os.path.join(self.playlist_dir, f"{title}.json")
         with open(playlist_path, "w") as playlist_file:
             json.dump(videos, playlist_file, indent=4)
 
+        logging.debug(f"Created playlist: {playlist_path}")
         return playlist_path
 
     def populate_playlist(self):
@@ -409,11 +477,12 @@ class VideoNavigatorApp:
             self.tree.item(selected_item, values=[playlist_path])
 
             # Immediately save the updated structure to the JSON file
-            with open(f"{topic_name}.json", "w") as file:
+            with open(os.path.join(self.script_dir, f"{topic_name}.json"), "w") as file:
                 json.dump(self.topics[topic_name], file, indent=4)
-
+            logging.debug(f"Updated JSON file for topic '{topic_name}' with playlist: {playlist_path}")
         else:
             self.message_area.insert(tk.END, f"Error: Could not update playlist for '{selected_title}'.\n")
+            logging.error(f"Failed to update JSON file for '{selected_title}' in topic '{topic_name}'.")
 
     def get_topic_name(self, item_id):
         while True:
@@ -566,8 +635,10 @@ class VideoNavigatorApp:
 
     def update_json_file_after_edit(self, topic_name):
         """Save the modified topic structure back to the corresponding JSON file."""
-        with open(f"{topic_name}.json", "w") as file:
+        topic_file_path = os.path.join(self.script_dir, f"{topic_name}.json")
+        with open(topic_file_path, "w") as file:
             json.dump(self.topics[topic_name], file, indent=4)
+        logging.debug(f"Saved updated topic '{topic_name}' to {topic_file_path}")
 
     def add_to_structure_below(self, topic_name, parent_name, new_item_name, new_item_type):
         def find_and_add_below(structure, parent_name):
@@ -589,6 +660,7 @@ class VideoNavigatorApp:
                 self.topics[topic_name][new_item_name] = {}
             else:
                 self.topics[topic_name][new_item_name] = ""
+        logging.debug(f"Added '{new_item_name}' as '{new_item_type}' under '{parent_name}' in topic '{topic_name}'")
 
     def add_to_structure_inside(self, topic_name, parent_name, new_item_name, new_item_type):
         def find_and_add_inside(structure, parent_name):
@@ -609,6 +681,7 @@ class VideoNavigatorApp:
                 self.topics[topic_name][new_item_name] = {}
             else:
                 self.topics[topic_name][new_item_name] = ""
+        logging.debug(f"Added '{new_item_name}' as '{new_item_type}' inside '{parent_name}' in topic '{topic_name}'")
 
     def move_up(self):
         selected_item = self.tree.selection()[0]
@@ -623,13 +696,17 @@ class VideoNavigatorApp:
 
             if parent_title is None:
                 # This is a root-level topic
-                current_index = self.topic_files.index(f"{selected_title}.json")
-                prev_index = self.topic_files.index(f"{prev_title}.json")
-                self.topic_files[current_index], self.topic_files[prev_index] = (
-                    self.topic_files[prev_index],
-                    self.topic_files[current_index],
-                )
-                self.save_topic_files()
+                try:
+                    current_index = self.topic_files.index(f"{selected_title}.json")
+                    prev_index = self.topic_files.index(f"{prev_title}.json")
+                    self.topic_files[current_index], self.topic_files[prev_index] = (
+                        self.topic_files[prev_index],
+                        self.topic_files[current_index],
+                    )
+                    self.save_topic_files()
+                    logging.debug(f"Swapped root topics '{selected_title}' and '{prev_title}' in topic_files list")
+                except ValueError as e:
+                    logging.error(f"Error swapping root topics: {e}")
             else:
                 topic_name = self.get_topic_name(selected_item)
                 if parent_title in self.topics:
@@ -641,12 +718,14 @@ class VideoNavigatorApp:
                     self.swap_items_in_structure(parent_structure, selected_title, prev_title)
                     self.modified_topics.add(topic_name)
                     self.update_json_file_after_edit(topic_name)
+                    logging.debug(f"Swapped '{selected_title}' and '{prev_title}' under parent '{parent_title}' in topic '{topic_name}'")
                 else:
-                    print(f"Warning: Could not find structure for parent '{parent_title}'.")
+                    logging.warning(f"Could not find structure for parent '{parent_title}'.")
 
             # Move the item in the tree view
             current_index = self.tree.index(selected_item)
             self.tree.move(selected_item, self.tree.parent(selected_item), current_index - 1)
+            logging.debug(f"Moved '{selected_title}' up in the tree view")
 
     def move_down(self):
         selected_item = self.tree.selection()[0]
@@ -661,13 +740,17 @@ class VideoNavigatorApp:
 
             if parent_title is None:
                 # This is a root-level topic
-                current_index = self.topic_files.index(f"{selected_title}.json")
-                next_index = self.topic_files.index(f"{next_title}.json")
-                self.topic_files[current_index], self.topic_files[next_index] = (
-                    self.topic_files[next_index],
-                    self.topic_files[current_index],
-                )
-                self.save_topic_files()
+                try:
+                    current_index = self.topic_files.index(f"{selected_title}.json")
+                    next_index = self.topic_files.index(f"{next_title}.json")
+                    self.topic_files[current_index], self.topic_files[next_index] = (
+                        self.topic_files[next_index],
+                        self.topic_files[current_index],
+                    )
+                    self.save_topic_files()
+                    logging.debug(f"Swapped root topics '{selected_title}' and '{next_title}' in topic_files list")
+                except ValueError as e:
+                    logging.error(f"Error swapping root topics: {e}")
             else:
                 topic_name = self.get_topic_name(selected_item)
                 if parent_title in self.topics:
@@ -679,12 +762,14 @@ class VideoNavigatorApp:
                     self.swap_items_in_structure(parent_structure, selected_title, next_title)
                     self.modified_topics.add(topic_name)
                     self.update_json_file_after_edit(topic_name)
+                    logging.debug(f"Swapped '{selected_title}' and '{next_title}' under parent '{parent_title}' in topic '{topic_name}'")
                 else:
-                    print(f"Warning: Could not find structure for parent '{parent_title}'.")
+                    logging.warning(f"Could not find structure for parent '{parent_title}'.")
 
             # Move the item in the tree view
             current_index = self.tree.index(selected_item)
             self.tree.move(selected_item, self.tree.parent(selected_item), current_index + 1)
+            logging.debug(f"Moved '{selected_title}' down in the tree view")
 
     def swap_items_in_structure(self, structure, item1, item2):
         items = list(structure.items())
@@ -700,11 +785,13 @@ class VideoNavigatorApp:
             items[index1], items[index2] = items[index2], items[index1]
             structure.clear()
             structure.update(items)
+            logging.debug(f"Swapped items '{item1}' and '{item2}' in structure")
 
     def swap_items_in_list(self, item_list, item1, item2):
         index1 = item_list.index(f"{item1}.json")
         index2 = item_list.index(f"{item2}.json")
         item_list[index1], item_list[index2] = item_list[index2], item_list[index1]
+        logging.debug(f"Swapped items '{item1}' and '{item2}' in list")
 
     def rename_item(self):
         selected_item = self.tree.selection()
@@ -759,6 +846,7 @@ class VideoNavigatorApp:
                     items[index] = (new_name, value)  # Replace the old name with the new name
                     structure.clear()  # Clear the current structure
                     structure.update(items)  # Reinsert all items, maintaining the order
+                    logging.debug(f"Renamed '{old_name}' to '{new_name}' in structure")
                     return True
                 elif isinstance(value, dict):
                     # Recursively search within nested dictionaries
@@ -779,6 +867,7 @@ class VideoNavigatorApp:
         def delete_items(structure, selected_title):
             if selected_title in structure:
                 del structure[selected_title]
+                logging.debug(f"Deleted '{selected_title}' from structure")
                 return True
             for key, value in structure.items():
                 if isinstance(value, dict):
@@ -789,6 +878,9 @@ class VideoNavigatorApp:
         if delete_items(self.topics[topic_name], selected_title):
             self.tree.delete(selected_item)
             self.update_json_file_after_edit(topic_name)
+            logging.debug(f"Deleted item '{selected_title}' from tree and updated JSON")
+        else:
+            logging.error(f"Failed to delete item '{selected_title}' from structure")
 
     def add_new_topic(self):
         new_topic_name = simpledialog.askstring("New Topic", "Enter the name of the new topic:")
@@ -811,6 +903,7 @@ class VideoNavigatorApp:
                 new_item = self.tree.insert("", "end", text=new_topic_name, open=False)
 
             self.message_area.insert(tk.END, f"Added new topic: {new_topic_name}\n")
+            logging.debug(f"Added new topic: {new_topic_name}")
 
             # Update the in-memory structure
             self.topics[new_topic_name] = {}
@@ -819,10 +912,13 @@ class VideoNavigatorApp:
             # Also, update the topics_list.json file to include the new topic file
             self.topic_files.append(f"{new_topic_name}.json")
             self.save_topic_files()
+            logging.debug(f"Updated topic_files list with new topic: {new_topic_name}.json")
 
             # Save the new topic structure to a new JSON file
-            with open(f"{new_topic_name}.json", "w") as file:
+            new_topic_file_path = os.path.join(self.script_dir, f"{new_topic_name}.json")
+            with open(new_topic_file_path, "w") as file:
                 json.dump({}, file, indent=4)
+            logging.debug(f"Created new topic file: {new_topic_file_path}")
 
     def delete_topic(self):
         selected_item = self.tree.selection()[0]
@@ -831,17 +927,25 @@ class VideoNavigatorApp:
         if selected_title in self.topics:
             # Remove the topic from the in-memory structure
             del self.topics[selected_title]
+            logging.debug(f"Removed topic '{selected_title}' from in-memory structure")
+
             # Remove the topic from the list of topic files
             self.topic_files = [f for f in self.topic_files if not f.startswith(selected_title)]
+            logging.debug(f"Updated topic_files list after deleting topic '{selected_title}'")
+
             # Remove the topic from the modified topics set
             self.modified_topics.discard(selected_title)
+
             # Remove the JSON file from the filesystem
-            topic_file_path = f"{selected_title}.json"
+            topic_file_path = os.path.join(self.script_dir, f"{selected_title}.json")
             if os.path.exists(topic_file_path):
                 os.remove(topic_file_path)
+                logging.debug(f"Deleted topic file: {topic_file_path}")
 
             # Update the topics_list.json file to reflect the changes
             self.save_topic_files()
+            logging.debug(f"Saved updated topics_list.json after deleting topic '{selected_title}'")
+
             # Rebuild the tree structure to reflect the changes
             self.build_tree_structure()
 
@@ -867,9 +971,14 @@ class VideoNavigatorApp:
 
                 # Load each topic file from the new topics list
                 for topic_file in new_topics_list:
-                    topic_name = os.path.splitext(os.path.basename(topic_file))[0]
-                    with open(topic_file, "r") as tf:
-                        self.topics[topic_name] = json.load(tf)
+                    topic_file_path = os.path.join(self.script_dir, topic_file)
+                    topic_name = os.path.splitext(os.path.basename(topic_file_path))[0]
+                    if os.path.exists(topic_file_path):
+                        with open(topic_file_path, "r") as tf:
+                            self.topics[topic_name] = json.load(tf)
+                        logging.debug(f"Loaded topic '{topic_name}' from {topic_file_path}")
+                    else:
+                        logging.warning(f"Topic file '{topic_file_path}' does not exist")
 
                 # Build the tree structure with the newly loaded topics
                 self.build_tree_structure()
@@ -877,12 +986,14 @@ class VideoNavigatorApp:
                 # Update the current topics list and save it if needed
                 self.topic_files = new_topics_list
                 self.save_topic_files()
+                logging.debug(f"Loaded new topics list from {file_path}")
 
                 # Display success message
                 messagebox.showinfo("Success", "Successfully loaded and built the tree from the selected topics list.")
 
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to load topics list. Error: {str(e)}")
+                logging.error(f"Failed to load topics list from {file_path}. Error: {e}")
 
     def show_context_menu(self, event):
         # Show context menu
@@ -908,6 +1019,7 @@ class VideoNavigatorApp:
             # Update JSON file with the new playlist path
             self.update_json_file(selected_item, playlist_path)
             self.message_area.insert(tk.END, f"Added YouTube link for {selected_title}: {youtube_link}\n")
+            logging.debug(f"Added YouTube link for '{selected_title}': {youtube_link}")
 
     def delete_playlist(self):
         selected_item = self.tree.selection()[0]
@@ -919,15 +1031,19 @@ class VideoNavigatorApp:
             if os.path.exists(playlist_path):
                 os.remove(playlist_path)
                 self.message_area.insert(tk.END, f"Deleted playlist: {playlist_path}\n")
+                logging.debug(f"Deleted playlist: {playlist_path}")
 
             self.update_json_file(selected_item, "")
             self.tree.item(selected_item, values=[""])  # Clear the value in the tree
+            logging.debug(f"Cleared playlist path for '{selected_title}' in tree view")
 
     def on_close(self):
         for topic_name in self.modified_topics:
-            topic_file = f"{topic_name}.json"
-            with open(topic_file, "w") as file:
+            topic_file_path = os.path.join(self.script_dir, f"{topic_name}.json")
+            with open(topic_file_path, "w") as file:
                 json.dump(self.topics[topic_name], file, indent=4)
+            logging.debug(f"Saved topic '{topic_name}' to {topic_file_path}")
 
         self.save_topic_files()
+        logging.debug("Saved topics_list.json and closed VideoNavigatorApp")
         self.root.destroy()
