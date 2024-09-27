@@ -1,5 +1,8 @@
 [
     "Physics.json",
+    "Data_Science.json",
     "Machine_Learning.json",
-    "Financial.json"
+    "Python.json",
+    "Financial.json",
+    "ChatGPT.json"
 ]
