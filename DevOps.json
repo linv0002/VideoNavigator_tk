@@ -1,0 +1,58 @@
+{
+  "General": {
+    "DevOps Engineering Course for Beginners.mp4": "",
+    "Implementing DevOps in the Real World": "",
+    "Complete DevOps with Docker, Jenkins, GIT, Vagrant, and Maven": ""
+  },
+  "Docker": {
+    "Docker and Kubernetes - Full Course for Beginners.mp4": "",
+    "Docker Mastery with Kubernetes": "",
+    "The Docker for DevOps Course - From Development to Production": "",
+    "Docker Deep Dive": ""
+  },
+  "Kubernetes": {
+    "Getting Started with Kubernetes, 3rd Edition": "",
+    "Certified Kubernetes Application Developer 2022": "",
+    "Certified Kubernetes Administrator (CKA), 3rd Edition": "",
+    "Certified Kubernetes Administrator 2022": "",
+    "Kubernetes Networking Tutorial": "",
+    "Kubernetes Project-2022 CICD with Jenkins Helm on AKS and EKS": "",
+    "Monitoring Kubernetes With Prometheus": "",
+    "Helm Masterclass 50 Practical Demos for Kubernetes DevOps": "",
+    "HELM Kubernetes Packaging Manager for Developers & DevOps": "",
+    "HELM3 Chart - A Kubernetes Package Manager": ""
+  },
+  "Jenkins, Continuous Delivery": {
+    "Jenkins - From Zero to Hero": "",
+    "Ultimate Jenkins Guide with Interview Prep": "",
+    "DevOps Certified Jenkins Engineer": "",
+    "Learn DevOps CICD with Jenkins using Pipelines and Docker": ""
+  },
+  "Airflow": {
+    "The Complete Course of Apache Airflow 2024": "",
+    "The Complete Hands on Introduction to Apache Airflow": "",
+    "Master Airflow Beginner to Advance with Project": "",
+    "Apache Airflow Bootcamp Hands-On Workflow Automation": "",
+    "A.B.C.D. Apache Airflow 2.3.x": ""
+  },
+  "Github": {
+    "GitLab CI/CD - From Zero to Hero": "",
+    "Learn Github Action for CICD DevOps Pipelines": "",
+    "Learn GitLab in 3 Hr Tutorial for Beginners": "",
+    "Gitops With Github Actions.mp4": ""
+  },
+  "Kafka": {
+    "Apache Kafka Fundamentals": "",
+    "Apache Kafka Crash Course for Java and Python Developers": "",
+    "Apache Kafka Complete Developers Guide": ""
+  },
+  "Terraform, Infrastructure as Code": {
+    "Infrastructure as Code for Beginners": "",
+    "Terraform for the Absolute Beginner": "",
+    "Dev Ops Bootcamp - Terraform": "",
+    "Using Terraform to Manage Applications and Infrastructure": "",
+    "The Terraform & IaC Bootcamp": "",
+    "Mastering Terraform Iac on Azure Practical Hands-on": "",
+    "HashiCorp Terraform Associate Certification Course - Pass the Exam!.mp4": ""
+  }
+}
