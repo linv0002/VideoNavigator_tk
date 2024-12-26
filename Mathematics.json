@@ -68,9 +68,9 @@
         "Stochastic Calculus": "",
         "Topics in Mathematics with Applications in Finance - MIT": ""
     },
-    "Numerical Analysis": {
-        "Applied Linear Algebra and Numerical Analysis (UW)": "",
-        "Numerical Analysis of Time Dependent Problems (UW)": "",
+    "Numeslinal Analysis": {
+        "Applied Linear Algebra and Numeslinal Analysis (UW)": "",
+        "Numeslinal Analysis of Time Dependent Problems (UW)": "",
         "Scientific Computing (UW)": "",
         "Matlab Essentials for Engineering and Science Students": "",
         "Master MATLAB through Guided Problem Solving": "",
@@ -95,8 +95,8 @@
         "Prove It: The Art of Mathematical Argument": ""
     },
     "Topology": {
-        "Introduction to Topology with Examples - Math Sorcerer": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Introduction to Topology with Examples - Math Sorcerer.json",
-        "Topology and Geometry by Dr Tadashi Tokieda": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Topology and Geometry by Dr Tadashi Tokieda.json",
+        "Introduction to Topology with Examples - Math Sorcerer": "C:\\Users\\eslin\\PycharmProjects\\VideoNavigator_tk\\playlists\\Introduction to Topology with Examples - Math Sorcerer.json",
+        "Topology and Geometry by Dr Tadashi Tokieda": "C:\\Users\\eslin\\PycharmProjects\\VideoNavigator_tk\\playlists\\Topology and Geometry by Dr Tadashi Tokieda.json",
         "Topology of Mathematics": "",
         "Undergraduate Topology": "",
         "General Topology": "",
@@ -104,7 +104,7 @@
         "Shape of Nature": ""
     },
     "Analysis": {
-        "Real Analysis - MIT": "C:\\Users\\Eric\\PycharmProjects\\VideoNavigator_tk\\playlists\\Real Analysis - MIT.json",
+        "Real Analysis - MIT": "C:\\Users\\eslin\\PycharmProjects\\VideoNavigator_tk\\playlists\\Real Analysis - MIT.json",
         "Intro to Real Analysis - Bethel": "",
         "Visual Real Analysis Real Numbers Real Sequences": "",
         "Advanced calculus_Real analysis with the Math Sorcerer": "",
